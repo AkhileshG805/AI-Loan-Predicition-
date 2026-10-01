@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block title %}Analytics & EDA — LoanAI Decision Support System{% endblock %}
+
+{% block content %}
+<header class="hero-header">
+    <div class="hero-container">
+        <div class="hero-content">
+            <h1>Exploratory Data Analysis & Model Evaluation</h1>
+            <p>
+                Visualizing statistical distributions, correlation structures, and multi-model classification metrics.
+                These figures were programmatically generated during model training using Matplotlib and Seaborn.
+            </p>
+        </div>
+        <div class="hero-actions">
+            <a href="{{ url_for('predict') }}" class="btn btn-accent">
+                Try Prediction Form
+            </a>
+            <a href="{{ url_for('home') }}" class="btn btn-secondary" style="background: rgba(255,255,255,0.12); color: #FFF; border-color: rgba(255,255,255,0.2);">
+                Dashboard
+            </a>
+        </div>
+    </div>
+</header>
+
+<main class="main-wrapper">
+
+    <!-- Section 1: Machine Learning Model Evaluation & Confusion Matrices -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                Part 1: Classifier Performance & Confusion Matrix Analysis
+            </h2>
+            <span class="badge badge-primary">Report Chapter 5.8 & 5.9</span>
+        </div>
+        <p class="card-desc">
+            Visual comparisons of validation accuracy, precision, recall, and F1-score across all 4 supervised classification models, alongside their respective confusion matrices.
+        </p>
+
+        <div class="viz-gallery-grid">
+            <!-- Chart 1: Model Comparison Bar Chart -->
+            <div class="viz-frame">
+                <img src="{{ url_for('static', filename='visualizations/model_comparison.png') }}" alt="Model Evaluation Metrics Bar Chart">
+                <div class="viz-caption">
+                    <h4>Figure 5.1: Multi-Model Evaluation Comparison Bar Chart</h4>
+                    <p>
+                        Compares Accuracy, Precision, Recall, and F1-score across Logistic Regression, KNN, SVM, and Decision Tree. 
+                        <strong>Logistic Regression</strong> leads with an F1-score of 90.81% and Accuracy of 86.18%.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Chart 2: Confusion Matrices Subplots -->
+            <div class="viz-frame">
+                <img src="{{ url_for('static', filename='visualizations/confusion_matrices.png') }}" alt="Confusion Matrices for Classification Algorithms">
+                <div class="viz-caption">
+                    <h4>Figure 5.2: Validation Confusion Matrices Grid</h4>
+                    <p>
+                        Visualizes True Positives, True Negatives, False Positives, and False Negatives for each model on the 123-sample holdout test set.
+                        Logistic Regression achieved 84 True Positives and 22 True Negatives with only 1 False Negative.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 2: Underwriting Feature Dynamics (Credit History, Target Distribution, Correlations) -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                Part 2: Feature Relationships & Target Distribution
+            </h2>
+            <span class="badge badge-outline">Report Chapter 5.6</span>
+        </div>
+        <p class="card-desc">
+            Visualizing the statistical distributions that drive the model's decision boundaries.
+        </p>
+
+        <div class="viz-gallery-grid">
+            <!-- Chart 3: Credit History vs Loan Status -->
+            <div class="viz-frame">
+                <img src="{{ url_for('static', filename='visualizations/eda_credit_history_vs_loan.png') }}" alt="Credit History vs Loan Status Approval Countplot">
+                <div class="viz-caption">
+                    <h4>Figure 5.3: Loan Approval Status by Credit History Flag</h4>
+                    <p>
+                        Confirms Credit History as the single highest statistical predictor. Applicants with <code>Credit_History = 1.0</code> demonstrate an overwhelming sanction rate (~80%), whereas applicants with <code>0.0</code> are predominantly rejected.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Chart 4: Historical Loan Status Distribution -->
+            <div class="viz-frame">
+                <img src="{{ url_for('static', filename='visualizations/eda_loan_distribution.png') }}" alt="Historical Loan Status Pie Chart">
+                <div class="viz-caption">
+                    <h4>Figure 5.4: Target Class Distribution (Approval vs Rejection)</h4>
+                    <p>
+                        Illustrates class distribution: 422 approved (68.7%) vs 192 rejected (31.3%). This imbalance underscores why stratified sampling and F1-Score optimization were mandatory.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Chart 5: Correlation Matrix Heatmap -->
+            <div class="viz-frame">
+                <img src="{{ url_for('static', filename='visualizations/eda_correlation_heatmap.png') }}" alt="Correlation Matrix Heatmap of Numerical Features">
+                <div class="viz-caption">
+                    <h4>Figure 5.5: Numerical Feature Correlation Heatmap</h4>
+                    <p>
+                        Pearson correlation matrix mapping linear relationships across ApplicantIncome, CoapplicantIncome, LoanAmount, Loan_Amount_Term, and Credit_History.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Chart 6: Property Area vs Approval -->
+            <div class="viz-frame">
+                <img src="{{ url_for('static', filename='visualizations/eda_property_area_vs_loan.png') }}" alt="Property Area vs Loan Status">
+                <div class="viz-caption">
+                    <h4>Figure 5.6: Loan Sanction Distribution by Property Area</h4>
+                    <p>
+                        Compares sanction volumes across Urban, Semiurban, and Rural regions. Semiurban applicants display higher approval proportions in the historical dataset.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Chart 7: Applicant Income Distribution -->
+            <div class="viz-frame">
+                <img src="{{ url_for('static', filename='visualizations/eda_applicant_income.png') }}" alt="Applicant Income Distribution Histogram">
+                <div class="viz-caption">
+                    <h4>Figure 5.7: Applicant Monthly Income Distribution</h4>
+                    <p>
+                        Displays a right-skewed distribution of applicant monthly earnings, demonstrating why median imputation and standard scaling are necessary for machine learning convergence.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Chart 8: Education vs Loan Status -->
+            <div class="viz-frame">
+                <img src="{{ url_for('static', filename='visualizations/eda_education_vs_loan.png') }}" alt="Education Level vs Loan Status">
+                <div class="viz-caption">
+                    <h4>Figure 5.8: Loan Sanction Rate by Education Level</h4>
+                    <p>
+                        Categorical comparison showing Graduate applicants achieve higher total approval volumes compared to non-graduates.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+{% endblock %}

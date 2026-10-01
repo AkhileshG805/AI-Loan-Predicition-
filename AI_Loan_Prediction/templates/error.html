@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Error {{ error_code }} — LoanAI{% endblock %}
+
+{% block content %}
+<main class="main-wrapper" style="max-width: 600px; text-align: center; padding: 4rem 1.5rem;">
+    <div class="card" style="padding: 3rem 2rem;">
+        <div style="font-size: 4rem; font-weight: 900; color: var(--danger-crimson); margin-bottom: 0.5rem; letter-spacing: -0.05em;">
+            {{ error_code }}
+        </div>
+        <h2 style="font-size: 1.5rem; color: var(--primary-navy); margin-bottom: 1rem;">
+            {% if error_code == 404 %}Page Not Found{% else %}System Error{% endif %}
+        </h2>
+        <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 2rem; line-height: 1.6;">
+            {{ message }}
+        </p>
+        <div style="display: flex; justify-content: center; gap: 1rem;">
+            <a href="{{ url_for('home') }}" class="btn btn-primary">
+                Return to Dashboard
+            </a>
+            <a href="{{ url_for('predict') }}" class="btn btn-secondary">
+                Prediction Form
+            </a>
+        </div>
+    </div>
+</main>
+{% endblock %}

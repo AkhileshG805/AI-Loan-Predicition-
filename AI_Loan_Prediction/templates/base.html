@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}LoanAI — AI-Based Loan Approval Prediction & Decision Support System{% endblock %}</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Application Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+    <!-- Static Preview Detection Warning Banner (Shown only if opened outside Flask server) -->
+    <div id="staticWarningBanner" class="static-warning-banner">
+        ⚠️ <strong>STATIC FILE PREVIEW DETECTED:</strong> You have opened this HTML template directly (e.g. via Live Server or file browser).
+        To execute Machine Learning predictions and view real-time data, launch the Flask server: <code>python app.py</code> and navigate to <strong>http://127.0.0.1:5000</strong>.
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('home') }}" class="brand-logo">
+                <div class="brand-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    Loan<span>AI</span>
+                    <span class="brand-badge">Decision Support</span>
+                </div>
+            </a>
+
+            <ul class="nav-links">
+                <li>
+                    <a href="{{ url_for('home') }}" class="nav-link {% if active_page == 'dashboard' %}active{% endif %}">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"/>
+                            <rect x="14" y="3" width="7" height="7"/>
+                            <rect x="14" y="14" width="7" height="7"/>
+                            <rect x="3" y="14" width="7" height="7"/>
+                        </svg>
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('predict') }}" class="nav-link {% if active_page == 'predict' %}active{% endif %}">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <polyline points="10 9 9 9 8 9"/>
+                        </svg>
+                        Predict Loan
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('analytics') }}" class="nav-link {% if active_page == 'analytics' %}active{% endif %}">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="20" x2="18" y2="10"/>
+                            <line x1="12" y1="20" x2="12" y2="4"/>
+                            <line x1="6" y1="20" x2="6" y2="14"/>
+                        </svg>
+                        Analytics & EDA
+                    </a>
+                </li>
+            </ul>
+
+            <div class="nav-status">
+                <span class="status-dot"></span>
+                <span>Active: {{ model_info.best_model_name if model_info else 'Logistic Regression' }}</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages Container -->
+    <div class="main-wrapper" style="margin-top: 1.5rem; margin-bottom: 0;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        <div>{{ message }}</div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Dynamic Content Block -->
+    {% block content %}{% endblock %}
+
+    <!-- Global Application Footer -->
+    <footer>
+        <div class="footer-container">
+            <div>
+                <strong style="color: #FFFFFF; font-size: 1.05rem; letter-spacing: -0.01em;">LoanAI — Credit Underwriting Decision Support System</strong>
+            </div>
+            <p class="footer-disclaimer">
+                <strong>Academic Demonstration Notice:</strong> This software is an educational decision-support project developed for a 15-day AI & Data Science internship curriculum.
+                Predictions generated reflect statistical patterns learned from historical training records and do not constitute actual credit sanctioning or legally binding loan decisions by any financial institution.
+            </p>
+            <div class="footer-meta">
+                <span>Dataset: Kaggle / Analytics Vidhya (614 Records)</span>
+                <span>•</span>
+                <span>Algorithm: {{ model_info.best_model_name if model_info else 'Logistic Regression' }}</span>
+                <span>•</span>
+                <span>F1-Score: {{ "%.2f"|format((model_info.best_f1_score if model_info else 0.9081) * 100) }}%</span>
+                <span>•</span>
+                <span>© 2026 B.Tech Internship Project</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Client-side Application Script -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

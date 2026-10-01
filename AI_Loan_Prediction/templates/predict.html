@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+
+{% block title %}Predict Loan Approval — LoanAI Decision Support{% endblock %}
+
+{% block content %}
+<header class="hero-header">
+    <div class="hero-container">
+        <div class="hero-content">
+            <h1>Loan Application Assessment Form</h1>
+            <p>
+                Enter the applicant's demographic credentials and loan terms below. The active Machine Learning classifier 
+                will evaluate underwriting parameters and generate an instant decision prediction.
+            </p>
+        </div>
+        <div class="hero-actions">
+            <a href="{{ url_for('home') }}" class="btn btn-secondary" style="background: rgba(255,255,255,0.12); color: #FFF; border-color: rgba(255,255,255,0.2);">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </div>
+</header>
+
+<main class="main-wrapper" style="max-width: 980px;">
+
+    <!-- Quick Sample Fill Bar for Demonstrations -->
+    <div class="quick-fill-bar">
+        <div class="quick-fill-label">
+            ⚡ Quick-Fill Demo Profiles:
+        </div>
+        <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+            <button type="button" id="btnSampleLowRisk" class="btn btn-sm btn-secondary" style="background: #ECFDF5; border-color: #A7F3D0; color: #065F46;">
+                ✓ Low-Risk Sample (Approved)
+            </button>
+            <button type="button" id="btnSampleHighRisk" class="btn btn-sm btn-secondary" style="background: #FEF2F2; border-color: #FECACA; color: #991B1B;">
+                ✕ High-Risk Sample (Rejected)
+            </button>
+        </div>
+    </div>
+
+    <!-- Loan Application Card -->
+    <div class="card">
+        <form action="{{ url_for('predict') }}" method="POST" class="loan-form">
+            
+            <!-- Section 1: Demographics -->
+            <div class="form-section-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                1. Demographic & Applicant Profile
+            </div>
+            
+            <div class="form-grid-3">
+                <div class="form-group">
+                    <label for="Gender">Gender</label>
+                    <select name="Gender" id="Gender" required>
+                        <option value="" disabled selected>Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Married">Marital Status</label>
+                    <select name="Married" id="Married" required>
+                        <option value="" disabled selected>Select Status</option>
+                        <option value="Yes">Married (Yes)</option>
+                        <option value="No">Unmarried (No)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Dependents">Dependents</label>
+                    <select name="Dependents" id="Dependents" required>
+                        <option value="" disabled selected>Select Dependents</option>
+                        <option value="0">0 (None)</option>
+                        <option value="1">1 Dependent</option>
+                        <option value="2">2 Dependents</option>
+                        <option value="3+">3 or more (3+)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Education">Education Level</label>
+                    <select name="Education" id="Education" required>
+                        <option value="" disabled selected>Select Education</option>
+                        <option value="Graduate">Graduate</option>
+                        <option value="Not Graduate">Not Graduate</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Self_Employed">Self-Employed Status</label>
+                    <select name="Self_Employed" id="Self_Employed" required>
+                        <option value="" disabled selected>Select Status</option>
+                        <option value="No">No (Salaried)</option>
+                        <option value="Yes">Yes (Business/Self)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="Property_Area">Property Location Area</label>
+                    <select name="Property_Area" id="Property_Area" required>
+                        <option value="" disabled selected>Select Area</option>
+                        <option value="Urban">Urban</option>
+                        <option value="Semiurban">Semiurban</option>
+                        <option value="Rural">Rural</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Section 2: Financial Credentials -->
+            <div class="form-section-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                2. Financial & Income Details
+            </div>
+
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label for="ApplicantIncome">
+                        Applicant Monthly Income (₹)
+                        <span class="input-hint">Gross monthly in ₹ (e.g. 50,000)</span>
+                    </label>
+                    <input type="number" name="ApplicantIncome" id="ApplicantIncome" placeholder="e.g. 50000" min="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="CoapplicantIncome">
+                        Coapplicant Monthly Income (₹)
+                        <span class="input-hint">Monthly in ₹ (enter 0 if none)</span>
+                    </label>
+                    <input type="number" name="CoapplicantIncome" id="CoapplicantIncome" placeholder="e.g. 20000 or 0" min="0" required>
+                </div>
+            </div>
+
+            <!-- Section 3: Loan Parameters -->
+            <div class="form-section-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                3. Loan Request & Credit Record
+            </div>
+
+            <div class="form-grid-3">
+                <div class="form-group">
+                    <label for="LoanAmount">
+                        Requested Loan Amount (₹ in Thousands)
+                        <span class="input-hint">in Thousands (e.g. 150 = ₹1,50,000 / ₹1.5 Lakh)</span>
+                    </label>
+                    <input type="number" name="LoanAmount" id="LoanAmount" placeholder="e.g. 150 for ₹1,50,000" min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="Loan_Amount_Term">
+                        Loan Amortization Term
+                        <span class="input-hint">in Months (e.g. 360 = 30 yrs, 180 = 15 yrs)</span>
+                    </label>
+                    <input type="number" name="Loan_Amount_Term" id="Loan_Amount_Term" placeholder="e.g. 360" min="12" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="Credit_History">
+                        Credit History Guidelines
+                        <span class="input-hint">Credit bureau flag</span>
+                    </label>
+                    <select name="Credit_History" id="Credit_History" required>
+                        <option value="" disabled selected>Select Record</option>
+                        <option value="1.0">Guidelines Met (Good / 1.0)</option>
+                        <option value="0.0">Guidelines Not Met (Bad / 0.0)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Live Calculation Preview -->
+            <div class="calculation-preview">
+                <div class="calc-item">
+                    <div class="title">Engineered Total Income</div>
+                    <div class="val" id="previewTotalIncome">₹0</div>
+                </div>
+                <div class="calc-item">
+                    <div class="title">Engineered Income-to-Loan Ratio</div>
+                    <div class="val" id="previewRatio">0.00</div>
+                </div>
+                <div class="calc-item">
+                    <div class="title">Underwriting Model</div>
+                    <div class="val" style="font-size: 1rem; color: var(--accent-blue);">{{ model_info.best_model_name if model_info else 'Logistic Regression' }}</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <button type="submit" class="btn btn-primary btn-block" style="padding: 1rem; font-size: 1.05rem;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                    Evaluate Loan Application
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Educational Disclaimer Notice -->
+    <div class="disclaimer-card">
+        <strong>Academic Internship Project Notice:</strong>
+        This prediction engine is designed for decision-support and academic demonstration purposes. It utilizes supervised classification models trained on historical records to estimate sanction probabilities. It does not replace credit bureau underwriting, background verification, or bank policy guidelines.
+    </div>
+
+</main>
+{% endblock %}

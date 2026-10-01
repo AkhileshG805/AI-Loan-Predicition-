@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block title %}About & Viva Guide — LoanAI Decision Support System{% endblock %}
+
+{% block content %}
+<header class="hero-header">
+    <div class="hero-container">
+        <div class="hero-content">
+            <h1>Internship Project Architecture & Viva Guide</h1>
+            <p>
+                Comprehensive academic background, 15-day curriculum mapping, machine learning workflow, 
+                and viva defense questions for B.Tech AI & Data Science faculty reviews.
+            </p>
+        </div>
+        <div class="hero-actions">
+            <a href="{{ url_for('home') }}" class="btn btn-secondary" style="background: rgba(255,255,255,0.12); color: #FFF; border-color: rgba(255,255,255,0.2);">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </div>
+</header>
+
+<main class="main-wrapper" style="max-width: 1040px;">
+
+    <!-- Card 1: 15-Day Internship Curriculum Alignment -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                15-Day AI & Data Science Curriculum Mapping
+            </h2>
+            <span class="badge badge-primary">Curriculum Review</span>
+        </div>
+        <p class="card-desc">
+            This project synthesizes core topics from the 15-day internship training into an end-to-end classification system:
+        </p>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 120px;">Internship Day</th>
+                        <th style="width: 200px;">Topic Covered</th>
+                        <th>Project Implementation Application</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Day 2</strong></td>
+                        <td>Python Programming</td>
+                        <td>Functional architecture, data structures, modular classes in <code>train_model.py</code> and <code>app.py</code>.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Day 3</strong></td>
+                        <td>NumPy & Pandas</td>
+                        <td>Dataframe cleaning, handling missing nulls, type conversions, and vector math.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Day 4</strong></td>
+                        <td>Matplotlib & Seaborn</td>
+                        <td>Visualization generation (pie charts, histograms, heatmaps, and confusion matrices).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Day 5 & 6</strong></td>
+                        <td>ML Workflow & Preprocessing</td>
+                        <td>Pipeline design (imputation, scaling, one-hot encoding), stratified splitting, preventing data leakage.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Day 8</strong></td>
+                        <td>Classification & KNN</td>
+                        <td>K-Nearest Neighbors classifier training with distance metrics.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Day 9</strong></td>
+                        <td>SVM & Decision Tree</td>
+                        <td>RBF-kernel Support Vector Machine and Decision Tree tree-depth tuning.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Day 14 & 15</strong></td>
+                        <td>Project Integration & Deployment</td>
+                        <td>Flask web serving, input validation, serialization via Joblib, and decision reporting.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p style="font-size: 0.82rem; color: var(--text-light); margin-top: 0.75rem;">
+            *Note: While NLP, OpenCV/Computer Vision, and Generative AI were covered in Days 10-13, they are not artificially declared as components of this tabular classification model to ensure academic integrity.
+        </p>
+    </div>
+
+    <!-- Card 2: Feature Engineering & Preprocessing Pipeline -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                Mathematical Feature Engineering & Pipeline Design
+            </h2>
+        </div>
+        <div class="grid-2col">
+            <div>
+                <h4 style="color: var(--primary-navy); margin-bottom: 0.5rem;">Engineered Features:</h4>
+                <ul style="padding-left: 1.25rem; font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+                    <li>
+                        <strong>TotalIncome:</strong> <code>ApplicantIncome + CoapplicantIncome</code><br>
+                        <em>Rationale:</em> Loans are serviced using combined household cash flow rather than single-applicant base salary.
+                    </li>
+                    <li>
+                        <strong>Income_to_Loan_Ratio:</strong> <code>TotalIncome / (LoanAmount + 0.001)</code><br>
+                        <em>Rationale:</em> Assesses capital coverage relative to borrowed principal. Adding 0.001 prevents zero-division errors.
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h4 style="color: var(--primary-navy); margin-bottom: 0.5rem;">Anti-Leakage Preprocessing:</h4>
+                <ul style="padding-left: 1.25rem; font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+                    <li><strong>Numerical Pipeline:</strong> <code>SimpleImputer(strategy='median')</code> followed by <code>StandardScaler()</code>.</li>
+                    <li><strong>Categorical Pipeline:</strong> <code>SimpleImputer(strategy='most_frequent')</code> followed by <code>OneHotEncoder(drop='first')</code>.</li>
+                    <li><strong>Fit Isolation:</strong> Transformers are fitted exclusively on <code>X_train</code> and applied downstream to <code>X_test</code> and live inputs.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card 3: Faculty Viva Voce Questions & Model Answers -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                Faculty Viva Voce Preparation Guide
+            </h2>
+            <span class="badge badge-success">Top Exam Q&A</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <div style="background: var(--bg-card-subtle); padding: 1.15rem; border-radius: var(--radius-md);">
+                <strong style="color: var(--primary-navy); font-size: 0.95rem; display: block; margin-bottom: 0.35rem;">
+                    Q1: Why did you choose Logistic Regression as the best model instead of more complex models like SVM or Decision Trees?
+                </strong>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">
+                    <strong>Answer:</strong> On our holdout validation set, Logistic Regression achieved the highest F1-Score (90.81%) and overall accuracy (86.18%), with an exceptional 98.82% recall. In credit sanctioning, Logistic Regression provides stable probabilistic boundaries without overfitting small tabular datasets (614 rows).
+                </p>
+            </div>
+
+            <div style="background: var(--bg-card-subtle); padding: 1.15rem; border-radius: var(--radius-md);">
+                <strong style="color: var(--primary-navy); font-size: 0.95rem; display: block; margin-bottom: 0.35rem;">
+                    Q2: What is Data Leakage and how did your implementation prevent it?
+                </strong>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">
+                    <strong>Answer:</strong> Data leakage occurs when information from outside the training dataset (such as test set statistics) is inadvertently used to transform features. We prevented this by isolating <code>train_test_split</code> before fitting the <code>ColumnTransformer</code> on <code>X_train</code> only. The saved pipeline is then used to transform test inputs and live user entries.
+                </p>
+            </div>
+
+            <div style="background: var(--bg-card-subtle); padding: 1.15rem; border-radius: var(--radius-md);">
+                <strong style="color: var(--primary-navy); font-size: 0.95rem; display: block; margin-bottom: 0.35rem;">
+                    Q3: Why is F1-Score a better evaluation metric than Accuracy for this dataset?
+                </strong>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">
+                    <strong>Answer:</strong> The dataset has moderate class imbalance (~68.7% approved vs ~31.3% rejected). A naive baseline predicting all approvals would achieve ~68.7% accuracy while failing to detect credit risk. The F1-score balances precision and recall, ensuring both false approvals and false rejections are penalized.
+                </p>
+            </div>
+
+            <div style="background: var(--bg-card-subtle); padding: 1.15rem; border-radius: var(--radius-md);">
+                <strong style="color: var(--primary-navy); font-size: 0.95rem; display: block; margin-bottom: 0.35rem;">
+                    Q4: What is the most critical feature in determining loan approval?
+                </strong>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;">
+                    <strong>Answer:</strong> Credit History (<code>Credit_History</code>). Our exploratory count plots show that applicants meeting credit guidelines (1.0) have an approval rate exceeding 80%, while applicants without credit history (0.0) face near-total rejection.
+                </p>
+            </div>
+        </div>
+    </div>
+
+</main>
+{% endblock %}
